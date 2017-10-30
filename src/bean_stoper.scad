@@ -1,14 +1,18 @@
-/* [Global] */
+/* [Print Settings] */
 
 enable_tolerance = true; // [true,false]
+
+// Select the tolerance with layer height value to print.
 tolerance = 0.1; // [0.05:Layer Height is 0.3,0.1:Layer Height is 0.2, 0.2:Layer Height is 0.1,0.3:Layer Height is 0.05]
 
 /* [Funnel] */
+
 funnel_outer_diameter = 34.8; // [20:60]
 funnel_inner_diameter = 30.4; // [20:60]
 funnel_slot_depth = 10; // [1:20]
 
 /* [Body] */
+
 stopper_body_height = 30;
 stopper_body_diameter = 40;
 stopper_body_length = 40; // [30:1:50]
@@ -20,6 +24,7 @@ stopper_plate_text_engrave_depth = 1;
 stopper_plate_text_size = 8;
 
 /* [Bottom Tube] */
+
 tube_type = "Round"; // [Square:Square slot to the grinder,Round:Round slot to the grinder]
 bottom_tube_diameter = 30;  // value of diameter for rounded slot
 bottom_tube_thick = 2.5;
@@ -27,8 +32,11 @@ bottom_tube_height = 10;
 
 
 /* [Hidden] */
+
 hole_diameter = funnel_inner_diameter-4; 
 stopper_plate_length = stopper_body_length + stopper_plate_additional_length;
+$fs = 0.01;
+$fn = 200;
 
 // Update value is the tolerance trigger has on
 if (enable_tolerance){
@@ -38,6 +46,35 @@ if (enable_tolerance){
 }
 
 //
+//
+translate([0,0,stopper_body_diameter])
+rotate([90,0,0])
+union(){
+    translate([0,0,-bottom_tube_height])
+        createBottom(tube_type,bottom_tube_diameter, bottom_tube_thick, bottom_tube_height);
+    difference(){
+        createMiddle(body=[stopper_body_height,stopper_body_diameter,stopper_body_length], funnel=[funnel_outer_diameter,funnel_inner_diameter,funnel_slot_depth], tunnel=hole_diameter);
+        
+        translate([0,5,stopper_body_height*0.75])
+        scale([1.1,1.05,1.20])
+            createStopPlate(stopper_plate_thick,stopper_plate_length, stopper_body_diameter, hole_diameter, stopper_plate_pulling_hole_diameter);
+    }
+}
+
+translate([stopper_body_diameter,0,0])
+difference(){
+    createStopPlate(stopper_plate_thick,stopper_plate_length, stopper_body_diameter, hole_diameter, stopper_plate_pulling_hole_diameter);
+
+    linear_extrude(height=stopper_plate_thick)
+    translate([0,-stopper_plate_length])
+            circle(d=stopper_plate_pulling_hole_diameter);
+    
+    translate([0,0,stopper_plate_thick-stopper_plate_text_engrave_depth])
+    linear_extrude(height=10)
+    rotate([0,0,-90])
+    text(text=stopper_plate_text, size=stopper_plate_text_size, valign="center",halign="left");
+}
+
 
 module createBottom(slot_type, diameter, thick=2, h=20){
     if (slot_type=="Round"){
@@ -107,32 +144,4 @@ module createStopPlate(plate_thick=2, plate_length=40, body_diameter, hole_diame
         translate([0,-plate_length])
             circle(d=adjusted_diameter); 
     }
-}
-//
-translate([0,0,stopper_body_diameter])
-rotate([90,0,0])
-union(){
-    translate([0,0,-bottom_tube_height])
-        createBottom(tube_type,bottom_tube_diameter, bottom_tube_thick, bottom_tube_height);
-    difference(){
-        createMiddle(body=[stopper_body_height,stopper_body_diameter,stopper_body_length], funnel=[funnel_outer_diameter,funnel_inner_diameter,funnel_slot_depth], tunnel=hole_diameter);
-
-        scale([1.1,1.05,1.05])
-        translate([0,5,stopper_body_height*0.7])
-            createStopPlate(stopper_plate_thick,stopper_plate_length, stopper_body_diameter, hole_diameter, stopper_plate_pulling_hole_diameter);
-    }
-}
-
-translate([stopper_body_diameter,0,0])
-difference(){
-    createStopPlate(stopper_plate_thick,stopper_plate_length, stopper_body_diameter, hole_diameter, stopper_plate_pulling_hole_diameter);
-
-    linear_extrude(height=stopper_plate_thick)
-    translate([0,-stopper_plate_length])
-            circle(d=stopper_plate_pulling_hole_diameter);
-    #
-    translate([0,0,stopper_plate_thick-stopper_plate_text_engrave_depth])
-    linear_extrude(height=10)
-    rotate([0,0,-90])
-    text(text=stopper_plate_text, size=stopper_plate_text_size, valign="center",halign="left");
 }
