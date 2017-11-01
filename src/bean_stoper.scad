@@ -7,18 +7,18 @@ tolerance = 0.1; // [0.05:Layer Height is 0.3,0.1:Layer Height is 0.2, 0.2:Layer
 
 /* [Funnel] */
 
-funnel_outer_diameter = 34.8; // [20:60]
-funnel_inner_diameter = 30.4; // [20:60]
-funnel_slot_depth = 10; // [1:20]
+funnel_outer_diameter = 34.8; // [20:0.1:60]
+funnel_inner_diameter = 30.4; // [20:0.1:60]
+funnel_slot_depth = 10; // [1:0.1:20]
 
 /* [Body] */
 
 stopper_body_height = 30;
 stopper_body_diameter = 40;
 stopper_body_length = 40; // [30:1:50]
-stopper_plate_thick = 2; // [1:5]
+stopper_plate_thick = 2; // [1:0.1:5]
 stopper_plate_additional_length = 10; // [0:1:20]
-stopper_plate_pulling_hole_diameter = 16; // [10:30]
+stopper_plate_pulling_hole_diameter = 16; // [10:0.1:30]
 stopper_plate_text = "Coffee";
 stopper_plate_text_engrave_depth = 1; 
 stopper_plate_text_size = 8;
@@ -26,7 +26,7 @@ stopper_plate_text_size = 8;
 /* [Bottom Tube] */
 
 tube_type = "Round"; // [Square:Square slot to the grinder,Round:Round slot to the grinder]
-bottom_tube_diameter = 30;  // value of diameter for rounded slot
+bottom_tube_diameter = 30;  // [10:0.1:50]
 bottom_tube_thick = 2.5;
 bottom_tube_height = 10;
 
