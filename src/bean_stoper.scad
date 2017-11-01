@@ -35,7 +35,7 @@ bottom_tube_height = 10;
 
 hole_diameter = funnel_inner_diameter-4; 
 stopper_plate_length = stopper_body_length + stopper_plate_additional_length;
-$fs = 0.01;
+
 $fn = 200;
 
 // Update value is the tolerance trigger has on
